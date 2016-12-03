@@ -15,8 +15,7 @@ class exports.CollapseHolder extends Layer
 			@.name = "collapse_" + toggleLayer.name
 			@.toggleLayer = toggleLayer
 		toggleLayer.on Events.Click, (e,l) =>
-			@.toggle(l)
-# 			@.states.next()
+				@.toggle(l)
 
 		@.resizeLayers(layerArray)
 
@@ -50,32 +49,19 @@ class exports.CollapseHolder extends Layer
 				y: layer.y-@.y
 
 	adjustLayers: (adjustment, toggleLayer, origin) =>
-		print "#COLL###################################################"
-		print "Looking at " + @.name + " by request of " + origin.name
-		print @.id, origin.id, origin.id != @.id, origin.id == @.id
 		if origin.id != @.id
-			print "Adjusting " + @.name
 			for layer in @.children
-				print " |  looking at: " + layer.name + " from " + @.name + " by request of " + origin.name
 				if layer.id != origin.id
-					print layer.y, toggleLayer.y
 					if @.sortedLayers.indexOf(layer) > @.sortedLayers.indexOf(origin)
 						layer.animate
 							properties:
 								y: layer.y + adjustment
 							time: 0.2
-						print "parent", layer.parent
 						layer.parent.animate
 							properties:
 								height: layer.parent.height + adjustment
 							time: 0.2
-					else print "Not adjusting origin: " + origin.name
 				else
-				print " |  moving " + layer.name + " by " + adjustment
-		else if origin.toggleLayer.id != @.id
-			print "Not Adjusting " + @.name
-		print "DONE -- MOVING TO: " + @.parent.name
-		print "########################################################"
 		@.parent.adjustLayers(adjustment, toggleLayer, origin)
 
 	collapse: () => @.animate("collapsed")
@@ -84,16 +70,10 @@ class exports.CollapseHolder extends Layer
 
 	toggle: (l) =>
 		@.states.next()
-		print @.height
 		adjustment = @.height
-		print " "
-		print " "
-		print "CHANGING " + @.name + " TO " + @.states.current.name
 		if @.states.current.scaleY is 0
-			print "shrinking", adjustment
 			adjustment = 0 - adjustment
 		else
-			print "expanding", adjustment
 		@.adjustLayers(adjustment, l, @)
 
 	sortLayers: (layerArray) =>
@@ -106,6 +86,7 @@ class exports.CollapseHolder extends Layer
 class exports.NestedList extends Layer
 	constructor: (parent, layerList) ->
 		super()
+		layerList.sort((a,b) -> a.y-b.y)
 		@.container = parent
 		@.superLayer = parent.superLayer
 		@.content = @.createHolders(layerList)
@@ -123,8 +104,7 @@ class exports.NestedList extends Layer
 			else if i[0]
 				@.depth= @.depth+1
 				collapseLayers.push(@.createHolders(i, nextToggle))
-		print toggleLayer
-		if typeof toggleLayer != "undefined"
+		if toggleLayer instanceof Layer
 			@.depth = @.depth - 1
 			return new exports.CollapseHolder(collapseLayers, toggleLayer)
 
@@ -154,43 +134,23 @@ class exports.NestedList extends Layer
 			for layer in collapseLayers
 				layer.parent = @
 				layer.superLayer = @
-				print layer
 
 	adjustLayers: (adjustment, toggleLayer, origin) =>
-		print "#NEST###################################################"
-		print "Adjustment", adjustment
-		print "Looking at " + @.name + " by request of " + origin.name
-		print "id: " + @.id, "origin: " +  origin.id, "=o: " + origin.id == @.id, "=t: " + toggleLayer.id == @.id
 		if origin.id != @.id
-			print "Adjusting " + @.name
 			for layer in @.children
-				print " |  looking at: " + layer.name+ " " + layer.id
-				print " | |  from " + @.name + " " + @.id
-				print " | |  by request of " + origin.name
-				print " | |  clicked on " + toggleLayer.name
 				if layer.id != origin.id and layer.id != toggleLayer.id
-					print layer.name, layer.screenFrame.y, " -- ", origin.name, origin.screenFrame.y, adjustment
 					if layer.screenFrame.y >= origin.screenFrame.y
-						print " |  moving " + layer.name + " by " + adjustment, layer.y
-						print layer.y, toggleLayer.y
 						layer.animate
 							properties:
 								y: layer.y + adjustment
 							time: 0.2
-				else if layer.id == origin.id
-					print "Not adjusting origin: " + layer.name
-				else if layer.id == toggleLayer.id
-					print "not adjusting toggleLayer"
-				else
-					movement = 0
-
-		else if origin.toggleLayer.id != @.id
-			print "Not Adjusting " + @.name
 
 		@.animate
 			properties:
 				height: @.height + adjustment
 			time: 0.2
+
+
 
 ##############################################################
 # CollapseHolder( [ layerArray ] , toggleLayer )

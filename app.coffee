@@ -9,8 +9,8 @@ Framer.Info =
 	description: "Example of nestedList class to allow for easy collapsing menus"
 
 
-# Import file "nestedList"
-sketch = Framer.Importer.load("imported/nestedList@1x")
+# Import file "nestedList" (sizes and positions are scaled 1:2)
+sketch = Framer.Importer.load("imported/nestedList@2x")
 
 
 shortcuts = require "shortcuts"
@@ -18,12 +18,24 @@ shortcuts.initialize(sketch)
 
 {NestedList} = require "nestedList"
 
-nestedLayers = [row_1,[row_1_1,[row_1_1_A],row_1_2,row_1_3],row_2,[row_2_1,[row_2_1_A,row_2_1_B], row_2_2, [row_2_2_B]]]
+nestedLayers = 
+	[row_1,
+		[row_1_1,
+			[row_1_1_A],
+		row_1_2,
+		row_1_3],
+	row_2,
+		[row_2_1,
+			[row_2_1_A,
+			row_2_1_B],
+		row_2_2,
+			[row_2_2_A]],
+	row_3,
+		[row_3_1,
+			[row_3_1_A],
+		row_3_2,
+			[row_3_2_B]
+	]]
 
 thisNestedList = new NestedList(fileTree, nestedLayers)
-	
-console.log(Framer.CurrentContext.layers)
 
-print row_2.y
-
-		 
