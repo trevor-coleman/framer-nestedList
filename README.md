@@ -1,9 +1,11 @@
 # framer-nestedList
-Module to turn a collection of sketch layers into a nested collapsible list. 
+Module to turn a collection of sketch layers into a nested collapsible list.
+
+Demo: [http://share.framerjs.com/0mme2e0ayi3l/](http://share.framerjs.com/0mme2e0ayi3l/)
 
 ## Sketch File Setup:
 * The rows each need to be an individual layer, and all at the same layer of the hierarchy.
-* The rows can be different sizes. 
+* The rows can be different sizes.
 * Not sure if they need to be touching or aligned..... _try at your own risk!_ (and let me know)
 * The layers should all be grouped together in a single group with nothing else in it. (the "containterGroup")
 * See the sketch file for an example. "fileTree" is the containerGroup, and the "row" layers are the ones that will be collapsed.
@@ -49,14 +51,14 @@ would create a structure like this:
     +--+- header_2
     |       |
     |       +--+- subhead_2_1
-    |       |     | 
+    |       |     |
     |       |     +--+- subhead_2_1_A
     |       |
     |       +- Subhead_2_2
     |
     +--+- header_3
  ```
-Any layers that in an array together will be collapsed together by clicking on their parent. 
+Any layers that in an array together will be collapsed together by clicking on their parent.
 
 In the tree above:
 * clicking on `header_1` would collapse `subhead_1_1` and `subhead_1_2`
